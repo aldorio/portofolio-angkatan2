@@ -1,3 +1,19 @@
+<?php 
+include 'config/koneksi.php';
+
+// munculkan semua data dari table user urutkan dari yang terbesar
+// ke terkecil
+
+$query = mysqli_query($config, "SELECT * FROM tbl_users ORDER BY id DESC");
+$row = mysqli_fetch_all($query, MYSQLI_ASSOC);
+
+if(isset($_GET['delete'])){
+  $id = $_GET['delete'];
+  $queryDelete = mysqli_query($config, "DELETE FROM tbl_users WHERE id='$id'");
+  header("location:user.php?hapus=berhasil");
+}
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -8,37 +24,7 @@
 </head>
 <body>
   <div class="wrapper">
-    <header class="shadow p-3 mb-5 bg-body-tertiary rounded">
-      <nav class="navbar navbar-expand-lg bg-body-tertiary">
-  <div class="container-fluid">
-    <a class="navbar-brand" href="#">CMS Aldo</a>
-    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-      <span class="navbar-toggler-icon"></span>
-    </button>
-    <div class="collapse navbar-collapse" id="navbarSupportedContent">
-      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-        <li class="nav-item">
-          <a class="nav-link active" aria-current="page" href="#">Home</a>
-        </li>
-        <li class="nav-item dropdown">
-          <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-            Page
-          </a>
-          <ul class="dropdown-menu">
-            <li><a class="dropdown-item" href="#">Page</a></li>
-            <li><a class="dropdown-item" href="#">Another action</a></li>
-            <li><hr class="dropdown-divider"></li>
-            <li><a class="dropdown-item" href="#">Something else here</a></li>
-          </ul>
-        </li>
-                <li class="nav-item">
-          <a class="nav-link" href="user.php">User</a>
-        </li>
-      </ul>
-    </div>
-  </div>
-</nav>
-    </header>
+    <?php include 'inc/header.php'; ?>
     <div class="content">
       <div class="container">
         <div class="row">
@@ -52,7 +38,7 @@
                   <div align="right" class="mb-3">
                     <a href="tambah-user.php" class="btn btn-primary">Add</a>
                   </div>
-                  <table class="table table-bordered table-striped">
+                  <table class="table table-bordered table-striped-collapse">
                     <thead>
                       <tr>
                         <th>No</th>
@@ -62,15 +48,19 @@
                       </tr>
                     </thead>
                     <tbody>
+                      <?php 
+                      foreach($row as $key => $data): ?>
                       <tr>
-                        <td>1</td>
-                        <td>Aldo</td>
-                        <td>aldorio12@gmail.com</td>
+                        
+                        <td><?= $key + 1 ?></td>
+                        <td><?= $data['name']?></td>
+                        <td><?= $data['email']?></td>
                         <td>
-                          <a href="" class="btn btn-success btn-sm">Edit</a>
-                          <a onclick="return confirm('Are u Sure?')" href="" class="btn btn-warning btn-sm">Delete</a>
+                          <a href="tambah-user.php?edit=<?php echo $data['id'] ?>" class="btn btn-success btn-sm">Edit</a>
+                          <a onclick="return confirm('Are u Sure?')" href="user.php?delete=<?php echo $data['id'] ?>" class="btn btn-warning btn-sm">Delete</a>
                         </td>
                       </tr>
+                      <?php endforeach ?>
                     </tbody>
                   </table>
                 </div>

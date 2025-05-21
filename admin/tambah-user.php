@@ -1,3 +1,39 @@
+<?php 
+include 'config/koneksi.php';
+
+// jika user mencet button simpan terjadi perintah ambil data dari inputan, email,nama, dan password
+// jika sudah input makan akan masuk ke dalam table user(name,email,password) nilainya dari masing" inputan
+
+if(isset($_POST['simpan'])){
+  $name = $_POST['name'];
+  $email = $_POST['email'];
+  $password = sha1($_POST['password']);
+
+  $query = mysqli_query($config, "INSERT INTO tbl_users (name, email, password) VALUES ('$name','$email','$password')");
+  if ($query) {
+    header("location:user.php?tambah=berhasil");
+  }
+  
+}
+
+$header = isset($_GET['edit'])? "Edit" : "Tambah";
+$id_user = isset($_GET['edit']) ? $_GET['edit'] : '';
+$queryEdit = mysqli_query($config, "SELECT * FROM tbl_users WHERE id='$id_user'");
+$rowEdit = mysqli_fetch_assoc($queryEdit);
+
+if(isset($_POST['edit'])){
+  $name = $_POST['name'];
+  $email = $_POST['email'];
+  $password = sha1($_POST['password']);
+
+  $queryUpdate = mysqli_query($config, "UPDATE tbl_users SET name='$name', email='$email', password='$password' WHERE id='$id_user'");
+  if ($queryUpdate) {
+    header("location:user.php?ubah=berhasil");
+  }
+}
+?>
+
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -18,7 +54,7 @@
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
       <ul class="navbar-nav me-auto mb-2 mb-lg-0">
         <li class="nav-item">
-          <a class="nav-link active" aria-current="page" href="#">Home</a>
+          <a class="nav-link active" aria-current="" href="dashboard.php">Home</a>
         </li>
         <li class="nav-item dropdown">
           <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
@@ -45,37 +81,37 @@
           <div class="col-sm-12">
             <div class="card">
               <div class="card-header">
-                Data User
+                <?= $header ?> Data User
               </div>
               <div class="card-body">
                 <form action="" method="post">
                   <div class="mb-3 row">
                     <div class="col-sm-2">
-                      <label for="">Nama</label>
+                      <label for="">Nama *</label>
                     </div>
                     <div class="col-sm-10">
-                      <input type="text" class="form-control" placeholder="Masukkan nama anda">
+                      <input  required name="name" type="text" class="form-control" placeholder="Masukkan nama anda" values="<?= $rowEdit['name']?> ">
                     </div>
                   </div>
                   <div class="mb-3 row">
                     <div class="col-sm-2">
-                      <label for="">Email</label>
+                      <label for="">Email *</label>
                     </div>
                     <div class="col-sm-10">
-                      <input type="Email" class="form-control" placeholder="Masukkan email anda">
+                      <input required name="email" type="Email" class="form-control" placeholder="Masukkan email anda" values="<?= $rowEdit['email']?> ">
                     </div>
                   </div>
                   <div class="mb-3 row">
                     <div class="col-sm-2">
-                      <label for="">Password</label>
+                      <label for="">Password *</label>
                     </div>
                     <div class="col-sm-10">
-                      <input type="password" class="form-control" placeholder="Masukkan password anda">
+                      <input required name="password" type="password" class="form-control" placeholder="Masukkan password anda">
                     </div>
                   </div>
                   <div class="mb-3 row">
                     <div class="col-sm-12">
-                      <button type="submit" class="btn btn-primary">Submit</button>
+                      <button name="<?= isset($_GET['edit']) ?'edit' : 'simpan'; ?>" type="submit" class="btn btn-primary">Submit</button>
                     </div>
                   </div>
                 </form>
