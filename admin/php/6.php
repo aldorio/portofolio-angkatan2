@@ -21,10 +21,7 @@ $_POST, $_GET, $_SESSION, $_SERVER, $_FILES, $_REQUEST
   </div>
   <br>
  
-   <div class="form-group">
-    <label for="">Nilai :</label>
-    <input type="number" name="nilai" placeholder="Masukkan Nilai Anda">
-  </div>
+  
     <br>
   <div class="form-group">
     <button type="submit">kirim</button>

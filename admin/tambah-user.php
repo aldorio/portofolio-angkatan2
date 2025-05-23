@@ -44,7 +44,7 @@ if(isset($_POST['edit'])){
 </head>
 <body>
   <div class="wrapper">
-    <header class="shadow p-3 mb-5 bg-body-tertiary rounded">
+    <!-- <header class="shadow p-3 mb-5 bg-body-tertiary rounded">
       <nav class="navbar navbar-expand-lg bg-body-tertiary">
   <div class="container-fluid">
     <a class="navbar-brand" href="#">CMS Aldo</a>
@@ -74,7 +74,8 @@ if(isset($_POST['edit'])){
     </div>
   </div>
 </nav>
-    </header>
+    </header> -->
+    <?php include 'inc/header.php'; ?>
     <div class="content">
       <div class="container">
         <div class="row">
@@ -90,7 +91,7 @@ if(isset($_POST['edit'])){
                       <label for="">Nama *</label>
                     </div>
                     <div class="col-sm-10">
-                      <input  required name="name" type="text" class="form-control" placeholder="Masukkan nama anda" values="<?= $rowEdit['name']?> ">
+                      <input  required name="name" type="text" class="form-control" placeholder="Masukkan nama anda" value="<?= isset($_GET['edit']) ? $rowEdit['name'] : '' ?> ">
                     </div>
                   </div>
                   <div class="mb-3 row">
@@ -98,7 +99,7 @@ if(isset($_POST['edit'])){
                       <label for="">Email *</label>
                     </div>
                     <div class="col-sm-10">
-                      <input required name="email" type="Email" class="form-control" placeholder="Masukkan email anda" values="<?= $rowEdit['email']?> ">
+                      <input required name="email" type="Email" class="form-control" placeholder="Masukkan email anda" value="<?= isset($_GET['edit']) ? $rowEdit['email'] : '' ?> ">
                     </div>
                   </div>
                   <div class="mb-3 row">
