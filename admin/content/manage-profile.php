@@ -1,12 +1,33 @@
 <?php 
 include "config/koneksi.php";
+
+
 if(isset($_POST['simpan'])){
   $profile_name = $_POST['profile_name'];
-  $profesion = $_POST['profesion'];
   $description = $_POST['description'];
   // proses simpan foto
-  $photo = $_FILES['photo'];
-  // var_dump($photo)
+  $photo = $_FILES['photo']['name'];
+
+
+  // mencari apakah di dalam table profiles ada datanya, jika ada maka update, jika tidak ada maka insert.
+  // mysqli_num_row()
+  $queryProfile = mysqli_query($config, "SELECT * FROM profiles ORDER BY id DESC");
+  if(mysqli_num_rows($queryProfile) > 0){
+    $rowProfile = mysqli_fetch_assoc($queryProfile);
+    $id = $rowProfile['id'];
+    // perintah update
+    $update = mysqli_query($config, "UPDATE profiles SET profile_name='$profile_name', description='$description' WHERE id ='$id' ");
+    header("location:?page=manage-profile&tambah=berhasil");
+  }else{
+    // perintah insert
+    if(!empty($photo)){
+      // jika user upload gambar
+    }else {$insertQ = mysqli_query($config, "INSERT INTO profiles (profile_name, description) VALUES ('$profile_name', '$description')");
+      header("location:?page=manage-profile&tambah=berhasil");
+      // jika user tidak upload gambar
+
+    }
+  }
   if($photo['error'] == 0) {
     $filesName = uniqid(). "_".basename($photo['name']);
     $filePath = "uploads/". $filesName;
@@ -43,28 +64,28 @@ $row = mysqli_fetch_assoc($selectProfile);
 
 <form action="" method="post" enctype="multipart/form-data">
   <div class="m-2" style="width:55%">  
-    <label for="" class="form-label">Profile Name</label>
+    <div class="mb-3">
+    <label for="" class="form-label">Judul</label>
     <input type="text"  value="<?php echo !isset($row['profile_name']) ? '' : $row['profile_name']?>" class="form-control" name="profile_name">
+    </div>
 
-    <label for="" class="form-label">Profession</label>
-    <input type="text" value="<?php echo !isset($row['profesion']) ? '' : $row['profesion']?>" class="form-control" name="profesion">
-
+    <div class="mb-3">
     <label for="" class="form-label">Descriptionn</label>
     <textarea type="text" value="" class="form-control" name="description" cols="30" rows="5"><?php echo !isset($row['description']) ? '' : $row['description']?> </textarea>
+    </div>
 
+    <div class="mb-3">
     <label for="" class="form-label">Photo</label>
     <input type="file" class="form-control" name="photo">
+    </div>
     <img src="<?php echo "uploads/". $row['photo']?>" width="300" alt=""><br>
-    <?php if(empty($row['profile_name'])) { ?>
-      
-      <button type="submit" name="simpan" class="btn btn-primary mt-2">Simpan</button>
-    <?php 
-    }else{
-      ?>
-      <a onclick= "return confirm('YAKIN INGIN HAPUS??')" href="?level=<?php echo base64_encode($_SESSION['LEVEL']) ?>&page=manage-profile&del=<?php echo $row['id'] ?>" class= "btn btn-danger mt-2">delete</a>
-    <?php } 
+
+    <div>
+      <input type="radio" name="status" value="1" checked> Publish
+      <input type="radio" name="status" value="0" > Private
+    </div>
+    <button type="submit" name="simpan" class="btn btn-primary mt-2" >Simpan Perubahan</button>
     
-    ?>
    
   
   </div>

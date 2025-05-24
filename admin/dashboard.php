@@ -1,4 +1,16 @@
+<?php 
+session_start();
+ob_start();
 
+$_name = isset($_SESSION['NAME']) ? $_SESSION['NAME'] : '';
+// if(isset($_SESSION['NAME])){$_name = $_SESSION['name]};
+if(!$_name){
+  header("location:index.php?access=failed");
+}
+
+include "config/koneksi.php";
+
+?>
 
 
 <!DOCTYPE html>
@@ -18,14 +30,22 @@
           <div class="col-sm-12">
             <div class="card">
               <div class="card-header">
-                Dashboard
+                <?php echo isset($_GET['page'])?str_replace("-", " ",subject: ucwords( $_GET['page'])) : 'Home'?>
               </div>
               <div class="card-body">
-                <?php if (isset($_GET['page']) &&file_exists("content/" . $_GET['page'] . ".php")) {
-                  include "content/" . $_GET['page'] . ".php";
-          
+                <?php 
+                  if (isset($_GET['page'])){
+
+                    if (file_exists("content/" . $_GET['page'] . ".php")) {
+                      include ("content/" . $_GET['page'] . ".php");
+                   } else { include "content/notfound.php";
                 }
-                  
+
+                
+              } else {
+                include "content/home.php";
+              }
+              
                   ?>
               </div>
             </div>
