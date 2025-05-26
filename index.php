@@ -1,3 +1,26 @@
+<?php
+include 'admin/config/koneksi.php';
+$queryprofile = mysqli_query($config, "SELECT * FROM profiles ORDER BY id DESC");
+$rowprofile = mysqli_fetch_assoc($queryprofile);
+
+if(isset($_POST['simpan'])){
+  $your_name = $_POST['your_name'];
+  $email = $_POST['email'];
+  $subject = $_POST['subject'];
+  $message = $_POST['message'];
+
+  $query = mysqli_query($config, "INSERT INTO contacts (your_name, email, subject, message) 
+  VALUES ('$your_name','$email','$subject','$message')");
+  if ($queryUpdate) {
+    header("location:index.php?ubah=berhasil");
+  }
+}
+
+
+
+?>
+
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -160,10 +183,10 @@
 
         <div class="row gy-4">
           <div class="col-lg-6" data-aos="fade-up" data-aos-delay="100">
-            <h3>Voluptatem dignissimos provident laboris nisi ut aliquip ex ea commodo</h3>
-            <img src="depan/assets/img/about.jpg" class="img-fluid rounded-4 mb-4" alt="">
-            <p>Ut fugiat ut sunt quia veniam. Voluptate perferendis perspiciatis quod nisi et. Placeat debitis quia recusandae odit et consequatur voluptatem. Dignissimos pariatur consectetur fugiat voluptas ea.</p>
-            <p>Temporibus nihil enim deserunt sed ea. Provident sit expedita aut cupiditate nihil vitae quo officia vel. Blanditiis eligendi possimus et in cum. Quidem eos ut sint rem veniam qui. Ut ut repellendus nobis tempore doloribus debitis explicabo similique sit. Accusantium sed ut omnis beatae neque deleniti repellendus.</p>
+            <h3><?php echo isset($rowprofile['profile_name']) ? $rowprofile['profile_name'] : '' ?></h3>
+            <img src=<?php echo isset($rowprofile['photo']) ? "admin/uploads/" . $rowprofile['photo'] : '' ?> alt="" width="1000" class="img-fluid">
+            <p><?php echo isset($rowprofile['profile_name']) ? $rowprofile['profile_name'] : '' ?></p>
+            <p><?php echo isset($rowprofile['description']) ? $rowprofile['description'] : '' ?></p>
           </div>
           <div class="col-lg-6" data-aos="fade-up" data-aos-delay="250">
             <div class="content ps-0 ps-lg-5">
@@ -638,6 +661,8 @@
     </section><!-- /Faq Section -->
 
     <!-- Contact Section -->
+
+    <form action="" class="p-5 bg-white" method="post">
     <section id="contact" class="contact section">
 
       <!-- Section Title -->
@@ -676,23 +701,23 @@
 
         </div>
 
-        <form action="forms/contact.php" method="post" class="php-email-form" data-aos="fade-up" data-aos-delay="400">
+        <form action="" method="post" class="php-email-form" data-aos="fade-up" data-aos-delay="400">
           <div class="row gy-4">
 
             <div class="col-md-6">
-              <input type="text" name="name" class="form-control" placeholder="Your Name" required="">
+              <input type="text" name="name" class="form-control" placeholder="Your Name" required="" name="your_name">
             </div>
 
             <div class="col-md-6 ">
-              <input type="email" class="form-control" name="email" placeholder="Your Email" required="">
+              <input type="email" class="form-control" name="email" placeholder="Your Email" required="" name="email">
             </div>
 
             <div class="col-md-12">
-              <input type="text" class="form-control" name="subject" placeholder="Subject" required="">
+              <input type="text" class="form-control" name="subject" placeholder="Subject" required="" name="subject">
             </div>
 
             <div class="col-md-12">
-              <textarea class="form-control" name="message" rows="6" placeholder="Message" required=""></textarea>
+              <textarea class="form-control" name="message" rows="6" placeholder="Message" required="" name="message"></textarea>
             </div>
 
             <div class="col-md-12 text-center">
@@ -700,7 +725,7 @@
               <div class="error-message"></div>
               <div class="sent-message">Your message has been sent. Thank you!</div>
 
-              <button type="submit">Send Message</button>
+              <button type="submit" name="simpan">Send Message</button>
             </div>
 
           </div>
@@ -709,7 +734,7 @@
       </div>
 
     </section><!-- /Contact Section -->
-
+  </form>
   </main>
 
   <footer id="footer" class="footer light-background">

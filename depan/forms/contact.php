@@ -5,23 +5,52 @@
   * The library should be uploaded to: vendor/php-email-form/php-email-form.php
   * For more info and help: https://bootstrapmade.com/php-email-form/
   */
+  include 'admin/config/koneksi.php';
 
-  // Replace contact@example.com with your real receiving email address
-  $receiving_email_address = 'contact@example.com';
 
-  if( file_exists($php_email_form = '../assets/vendor/php-email-form/php-email-form.php' )) {
-    include( $php_email_form );
-  } else {
-    die( 'Unable to load the "PHP Email Form" Library!');
-  }
+//   // Replace contact@example.com with your real receiving email address
+//   $receiving_email_address = 'contact@example.com';
+
+//   if( file_exists($php_email_form = '../assets/vendor/php-email-form/php-email-form.php' )) {
+//     include( $php_email_form );
+//   } else {
+//     die( 'Unable to load the "PHP Email Form" Library!');
+//   }
+
+
+//   if(isset($_POST['simpan'])){
+//   $your_name = $_POST['your_name'];
+//   $email = $_POST['email'];
+//   $subject = $_POST['subject'];
+//   $message = $_POST['message'];
+// }
+
+// if(!empty($photo)){
+
+      
+
+//       $insertQ = mysqli_query($config, "INSERT INTO contact (your_name, email, subject, message) 
+//       VALUES ('$your_name', '$email', '$subject', $message)");
+//       // header("location:?page=manage-profile&tambah=berhasil");
+      
+
+//     }else {
+//       // jika user tidak upload gambar
+//       $insertQ = mysqli_query($config, "INSERT INTO contact (your_name, email, subject, message) 
+//       VALUES ('$your_name', '$email', '$subject', $message)");
+//       // header("location:?page=manage-profile&tambah=berhasil");
+      
+      
+//     }
 
   $contact = new PHP_Email_Form;
   $contact->ajax = true;
   
   $contact->to = $receiving_email_address;
-  $contact->from_name = $_POST['name'];
-  $contact->from_email = $_POST['email'];
-  $contact->subject = $_POST['subject'];
+  $your_name = $_POST['your_name'];
+  $email = $_POST['email'];
+  $subject = $_POST['subject'];
+  $message = $_POST['message'];
 
   // Uncomment below code if you want to use SMTP to send emails. You need to enter your correct SMTP credentials
   /*
