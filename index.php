@@ -15,10 +15,10 @@ if(isset($_POST['simpan'])){
     header("location:index.php?ubah=berhasil");
   }
 }
-
-
-
 ?>
+
+
+
 
 
 <!DOCTYPE html>
@@ -668,7 +668,6 @@ if(isset($_POST['simpan'])){
       <!-- Section Title -->
       <div class="container section-title" data-aos="fade-up">
         <h2>Contact</h2>
-        <p>Necessitatibus eius consequatur ex aliquid fuga eum quidem sint consectetur velit</p>
       </div><!-- End Section Title -->
 
       <div class="container" data-aos="fade-up" data-aos-delay="100">
@@ -679,7 +678,7 @@ if(isset($_POST['simpan'])){
             <div class="info-item d-flex flex-column justify-content-center align-items-center" data-aos="fade-up" data-aos-delay="200">
               <i class="bi bi-geo-alt"></i>
               <h3>Address</h3>
-              <p>A108 Adam Street, New York, NY 535022</p>
+              <p>Kota Bekasi</p>
             </div>
           </div><!-- End Info Item -->
 
@@ -687,7 +686,7 @@ if(isset($_POST['simpan'])){
             <div class="info-item d-flex flex-column justify-content-center align-items-center" data-aos="fade-up" data-aos-delay="300">
               <i class="bi bi-telephone"></i>
               <h3>Call Us</h3>
-              <p>+1 5589 55488 55</p>
+              <p>+62 81317487094</p>
             </div>
           </div><!-- End Info Item -->
 
@@ -695,13 +694,13 @@ if(isset($_POST['simpan'])){
             <div class="info-item d-flex flex-column justify-content-center align-items-center" data-aos="fade-up" data-aos-delay="400">
               <i class="bi bi-envelope"></i>
               <h3>Email Us</h3>
-              <p>info@example.com</p>
+              <p>alprayoga@gmail.com</p>
             </div>
           </div><!-- End Info Item -->
 
         </div>
 
-        <form action="" method="post" class="php-email-form" data-aos="fade-up" data-aos-delay="400">
+        <form action="" method="post"  data-aos="fade-up" data-aos-delay="400">
           <div class="row gy-4">
 
             <div class="col-md-6">
@@ -721,11 +720,7 @@ if(isset($_POST['simpan'])){
             </div>
 
             <div class="col-md-12 text-center">
-              <div class="loading">Loading</div>
-              <div class="error-message"></div>
-              <div class="sent-message">Your message has been sent. Thank you!</div>
-
-              <button type="submit" name="simpan">Send Message</button>
+              <button class="btn btn-primary"  type="submit" name="simpan">Send Message</button>
             </div>
 
           </div>
