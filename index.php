@@ -1,7 +1,23 @@
 <?php
 include 'admin/config/koneksi.php';
+
 $queryprofile = mysqli_query($config, "SELECT * FROM profiles ORDER BY id DESC");
 $rowprofile = mysqli_fetch_assoc($queryprofile);
+
+$queryTeams = mysqli_query($config, "SELECT * FROM teams ORDER BY id DESC");
+$rowTeams   = mysqli_fetch_all($queryTeams, MYSQLI_ASSOC);
+
+$rowTeams = [];
+$query = mysqli_query($config, "SELECT * FROM teams WHERE status = 1");
+while ($team = mysqli_fetch_assoc($query)) {
+    $rowTeams[] = $team;
+}
+
+$queryCategories = mysqli_query($config, "SELECT * FROM categories ORDER BY id DESC");
+$rowCategories   = mysqli_fetch_all($queryCategories, MYSQLI_ASSOC);
+
+$queryPorto = mysqli_query($config, "SELECT * FROM portofolios ORDER BY id DESC");
+$rowPorto  = mysqli_fetch_all($queryPorto, MYSQLI_ASSOC);
 
 if(isset($_POST['simpan'])){
   $your_name = $_POST['your_name'];
@@ -27,7 +43,7 @@ if(isset($_POST['simpan'])){
 <head>
   <meta charset="utf-8">
   <meta content="width=device-width, initial-scale=1.0" name="viewport">
-  <title>Index - Mamba Bootstrap Template</title>
+  <title>My Portofolio</title>
   <meta name="description" content="">
   <meta name="keywords" content="">
 
@@ -57,6 +73,61 @@ if(isset($_POST['simpan'])){
   * Author: BootstrapMade.com
   * License: https://bootstrapmade.com/license/
   ======================================================== -->
+
+
+  <style>
+.team-member {
+  position: relative;
+  overflow: hidden;
+  text-align: center;
+  background: #fff;
+  border-radius: 8px;
+  box-shadow: 0 0 30px rgba(0, 0, 0, 0.08);
+  transition: all 0.3s ease-in-out;
+}
+
+.team-member img {
+  width: 100%;
+  height: 260px;
+  object-fit: cover;
+  border-top-left-radius: 8px;
+  border-top-right-radius: 8px;
+}
+
+.team-member .social {
+  position: absolute;
+  left: 0;
+  bottom: -40px;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  transition: 0.4s;
+  background: rgba(255,255,255,0.9);
+  padding: 10px 0;
+  border-top: 1px solid #eee;
+}
+
+.team-member:hover .social {
+  bottom: 0;
+}
+
+.team-member .p-3 {
+  padding: 20px;
+}
+
+.team-member h3 {
+  margin: 10px 0 5px;
+  font-size: 20px;
+  font-weight: 600;
+  color: #111;
+}
+
+.team-member .position {
+  font-size: 14px;
+  color: #aaa;
+}
+</style>
 </head>
 
 <body class="index-page">
@@ -66,14 +137,14 @@ if(isset($_POST['simpan'])){
     <div class="topbar d-flex align-items-center">
       <div class="container d-flex justify-content-center justify-content-md-between">
         <div class="contact-info d-flex align-items-center">
-          <i class="bi bi-envelope d-flex align-items-center"><a href="mailto:contact@example.com">contact@example.com</a></i>
-          <i class="bi bi-phone d-flex align-items-center ms-4"><span>+1 5589 55488 55</span></i>
+          <i class="bi bi-envelope d-flex align-items-center"><a href="mailto:contact@example.com">aldorio12@gmail.com</a></i>
+          <i class="bi bi-phone d-flex align-items-center ms-4"><span>+62 813 1748 7094</span></i>
         </div>
         <div class="social-links d-none d-md-flex align-items-center">
-          <a href="#" class="twitter"><i class="bi bi-twitter-x"></i></a>
-          <a href="#" class="facebook"><i class="bi bi-facebook"></i></a>
-          <a href="#" class="instagram"><i class="bi bi-instagram"></i></a>
-          <a href="#" class="linkedin"><i class="bi bi-linkedin"></i></a>
+          <a href="https://x.com/Aldorio_P" class="twitter"><i class="bi bi-twitter-x"></i></a>
+          <a href="https://www.facebook.com/aldosubur?locale=id_ID" class="facebook"><i class="bi bi-facebook"></i></a>
+          <a href="https://www.instagram.com/aldorio__/" class="instagram"><i class="bi bi-instagram"></i></a>
+          <a href="https://www.linkedin.com/in/aldo-rio-prayoga-46b537190/" class="linkedin"><i class="bi bi-linkedin"></i></a>
         </div>
       </div>
     </div><!-- End Top Bar -->
@@ -84,7 +155,7 @@ if(isset($_POST['simpan'])){
         <a href="index.html" class="logo d-flex align-items-center">
           <!-- Uncomment the line below if you also wish to use an image logo -->
           <!-- <img src="assets/img/logo.png" alt=""> -->
-          <h1 class="sitename">Mamba</h1>
+          <h1 class="sitename">My Portofolio</h1>
         </a>
 
         <nav id="navmenu" class="navmenu">
@@ -175,8 +246,8 @@ if(isset($_POST['simpan'])){
 
       <!-- Section Title -->
       <div class="container section-title" data-aos="fade-up">
-        <h2>About</h2>
-        <p>Necessitatibus eius consequatur ex aliquid fuga eum quidem sint consectetur velit</p>
+        <h2>About Me</h2>
+        
       </div><!-- End Section Title -->
 
       <div class="container">
@@ -184,20 +255,21 @@ if(isset($_POST['simpan'])){
         <div class="row gy-4">
           <div class="col-lg-6" data-aos="fade-up" data-aos-delay="100">
             <h3><?php echo isset($rowprofile['profile_name']) ? $rowprofile['profile_name'] : '' ?></h3>
-            <img src=<?php echo isset($rowprofile['photo']) ? "admin/uploads/" . $rowprofile['photo'] : '' ?> alt="" width="1000" class="img-fluid">
-            <p><?php echo isset($rowprofile['profile_name']) ? $rowprofile['profile_name'] : '' ?></p>
-            <p><?php echo isset($rowprofile['description']) ? $rowprofile['description'] : '' ?></p>
+            <img src="<?php echo isset($rowprofile['photo']) ? "admin/uploads/" . $rowprofile['photo'] : '' ?>" alt="" width="500" class="img-fluid">
+            
           </div>
           <div class="col-lg-6" data-aos="fade-up" data-aos-delay="250">
             <div class="content ps-0 ps-lg-5">
-              <p class="fst-italic">
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore
-                magna aliqua.
+              <p><?php echo isset($rowprofile['description']) ? $rowprofile['description'] : '' ?></p>
+              <p class="fw-bold">
+                Pendidikan
               </p>
               <ul>
-                <li><i class="bi bi-check-circle-fill"></i> <span>Ullamco laboris nisi ut aliquip ex ea commodo consequat.</span></li>
-                <li><i class="bi bi-check-circle-fill"></i> <span>Duis aute irure dolor in reprehenderit in voluptate velit.</span></li>
-                <li><i class="bi bi-check-circle-fill"></i> <span>Ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate trideta storacalaperda mastiro dolore eu fugiat nulla pariatur.</span></li>
+                <li><i class="bi bi-dash"></i> <span><?php echo isset($rowprofile['pendidikan']) ? $rowprofile['pendidikan'] : '' ?></span></li>
+              <p class="fw-bold">
+                Pengalaman Kerja
+              </p>
+                <li><i class="bi bi-dash"></i> <span><?php echo isset($rowprofile['pengalaman']) ? $rowprofile['pengalaman'] : '' ?></span></li>
               </ul>
               <p>
                 Ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate
@@ -205,8 +277,8 @@ if(isset($_POST['simpan'])){
               </p>
 
               <div class="position-relative mt-4">
-                <img src="depan/assets/img/about-2.jpg" class="img-fluid rounded-4" alt="">
-                <a href="https://www.youtube.com/watch?v=Y7f98aduVJ8" class="glightbox pulsating-play-btn"></a>
+                <img src="assets/img/about-2.jpg" class="img-fluid rounded-4" alt="">
+                <a href="https://www.youtube.com/watch?v=D0UnqGm_miA" class="glightbox pulsating-play-btn"></a>
               </div>
             </div>
           </div>
@@ -260,36 +332,36 @@ if(isset($_POST['simpan'])){
 
         <div class="row gy-4">
 
-          <div class="col-lg-3 col-md-6 d-flex flex-column align-items-center">
+          <div class="col-lg-4 col-md-6 d-flex flex-column align-items-center">
             <i class="bi bi-emoji-smile"></i>
             <div class="stats-item">
-              <span data-purecounter-start="0" data-purecounter-end="232" data-purecounter-duration="1" class="purecounter"></span>
+              <span data-purecounter-start="0" data-purecounter-end="13" data-purecounter-duration="1" class="purecounter"></span>
               <p>Happy Clients</p>
             </div>
           </div><!-- End Stats Item -->
 
-          <div class="col-lg-3 col-md-6 d-flex flex-column align-items-center">
+          <div class="col-lg-4 col-md-6 d-flex flex-column align-items-center">
             <i class="bi bi-journal-richtext"></i>
             <div class="stats-item">
-              <span data-purecounter-start="0" data-purecounter-end="521" data-purecounter-duration="1" class="purecounter"></span>
+              <span data-purecounter-start="0" data-purecounter-end="2" data-purecounter-duration="1" class="purecounter"></span>
               <p>Projects</p>
             </div>
           </div><!-- End Stats Item -->
 
-          <div class="col-lg-3 col-md-6 d-flex flex-column align-items-center">
+          <div class="col-lg-4 col-md-6 d-flex flex-column align-items-center">
             <i class="bi bi-headset"></i>
             <div class="stats-item">
-              <span data-purecounter-start="0" data-purecounter-end="1463" data-purecounter-duration="1" class="purecounter"></span>
+              <span data-purecounter-start="0" data-purecounter-end="80" data-purecounter-duration="1" class="purecounter"></span>
               <p>Hours Of Support</p>
             </div>
           </div><!-- End Stats Item -->
 
-          <div class="col-lg-3 col-md-6 d-flex flex-column align-items-center">
+          <!-- <div class="col-lg-3 col-md-6 d-flex flex-column align-items-center">
             <i class="bi bi-people"></i>
             <div class="stats-item">
               <span data-purecounter-start="0" data-purecounter-end="15" data-purecounter-duration="1" class="purecounter"></span>
               <p>Hard Workers</p>
-            </div>
+            </div> -->
           </div><!-- End Stats Item -->
 
         </div>
@@ -405,26 +477,37 @@ if(isset($_POST['simpan'])){
 
         <div class="isotope-layout" data-default-filter="*" data-layout="masonry" data-sort="original-order">
 
-          <ul class="portfolio-filters isotope-filters" data-aos="fade-up" data-aos-delay="100">
-            <li data-filter="*" class="filter-active">All</li>
-            <li data-filter=".filter-app">App</li>
-            <li data-filter=".filter-product">Card</li>
-            <li data-filter=".filter-branding">Web</li>
-          </ul><!-- End Portfolio Filters -->
+          <div class="row justify-content-center mb-5" data-aos="fade-up">
+                    <div id="filters" class="filters text-center button-group col-md-7">
+                        <button class="btn btn-primary active" data-filter="*">All</button>
+                        <?php foreach ($rowCategories as $category): ?>
+                            <button class="btn btn-primary" data-filter=".<?php echo $category['id'] ?>"><?php echo $category['name'] ?></button>
+                        <?php endforeach ?>
+                    </div>
+                </div>
+                <!-- End Portfolio Filters -->
 
           <div class="row gy-4 isotope-container" data-aos="fade-up" data-aos-delay="200">
 
-            <div class="col-lg-4 col-md-6 portfolio-item isotope-item filter-app">
-              <img src="depan/assets/img/masonry-portfolio/masonry-portfolio-1.jpg" class="img-fluid" alt="">
-              <div class="portfolio-info">
-                <h4>App 1</h4>
-                <p>Lorem ipsum, dolor sit</p>
-                <a href="depan/assets/img/masonry-portfolio/masonry-portfolio-1.jpg" title="App 1" data-gallery="portfolio-gallery-app" class="glightbox preview-link"><i class="bi bi-zoom-in"></i></a>
-                <a href="portfolio-details.html" title="More Details" class="details-link"><i class="bi bi-link-45deg"></i></a>
-              </div>
-            </div><!-- End Portfolio Item -->
+             <div class="row gy-4 portfolio-container" data-aos="fade-up" data-aos-delay="200">
+  <?php foreach ($rowPorto as $porto): ?>
+    <div class="col-lg-4 col-md-6 portfolio-item filter-<?php echo $porto['id_category']; ?>">
+      <div class="portfolio-wrap">
+        <img src="<?php echo "admin/portfolios/" . $porto['photo']; ?>" class="img-fluid" alt="">
+        <div class="portfolio-info">
+          <h4><?php echo $porto['name_photo']; ?></h4>
+          <div class="portfolio-links">
+            <a href="<?php echo "admin/portfolios/" . $porto['photo']; ?>" data-gallery="portfolioGallery" class="portfolio-lightbox" title="<?php echo $porto['name_photo']; ?>"><i class="bx bx-plus"></i></a>
+            <!-- Optional: Detail page link -->
+            <!-- <a href="portfolio-details.php?id=<?php echo $porto['id']; ?>" title="More Details"><i class="bx bx-link"></i></a> -->
+          </div>
+        </div>
+      </div>
+    </div>
+  <?php endforeach; ?>
+</div><!-- End Portfolio Item -->
 
-            <div class="col-lg-4 col-md-6 portfolio-item isotope-item filter-product">
+            <!-- <div class="col-lg-4 col-md-6 portfolio-item isotope-item filter-product">
               <img src="depan/assets/img/masonry-portfolio/masonry-portfolio-2.jpg" class="img-fluid" alt="">
               <div class="portfolio-info">
                 <h4>Product 1</h4>
@@ -432,7 +515,7 @@ if(isset($_POST['simpan'])){
                 <a href="assets/img/masonry-portfolio/masonry-portfolio-2.jpg" title="Product 1" data-gallery="portfolio-gallery-product" class="glightbox preview-link"><i class="bi bi-zoom-in"></i></a>
                 <a href="portfolio-details.html" title="More Details" class="details-link"><i class="bi bi-link-45deg"></i></a>
               </div>
-            </div><!-- End Portfolio Item -->
+            </div>End Portfolio Item -->
 
             <div class="col-lg-4 col-md-6 portfolio-item isotope-item filter-branding">
               <img src="assets/img/masonry-portfolio/masonry-portfolio-3.jpg" class="img-fluid" alt="">
@@ -525,59 +608,32 @@ if(isset($_POST['simpan'])){
 
         <div class="row gy-5">
 
-          <div class="col-xl-4 col-md-6 d-flex" data-aos="zoom-in" data-aos-delay="200">
-            <div class="team-member">
-              <div class="member-img">
-                <img src="assets/img/team/team-1.jpg" class="img-fluid" alt="">
-              </div>
-              <div class="member-info">
-                <div class="social">
-                  <a href=""><i class="bi bi-twitter-x"></i></a>
-                  <a href=""><i class="bi bi-facebook"></i></a>
-                  <a href=""><i class="bi bi-instagram"></i></a>
-                  <a href=""><i class="bi bi-linkedin"></i></a>
-                </div>
-                <h4>Walter White</h4>
-                <span>Chief Executive Officer</span>
-              </div>
-            </div>
-          </div><!-- End Team Member -->
+          <?php foreach ($rowTeams as $team): ?>
+                        <div class="col-sm-5 col-md-4 row justify-content-md-center" data-aos="fade-up" data-aos-delay="">
+                            <div class="team-member">
+                                <figure>
+                                    <ul class="social">
+                                        <li><a href="#"><span class="icon-facebook"></span></a></li>
+                                        <li><a href="https://x.com/Aldorio_P"><span class="bi bi-twitter-x"></span></a></li>
+                                        <li><a href="#"><span class="icon-linkedin"></span></a></li>
+                                        <li><a href="#"><span class="icon-instagram"></span></a></li>
+                                    </ul>
+                                    <img src="<?php echo 'admin/team/' . $team['photo']; ?> " class="img-fluid" style="max-height: 250px; object-fit: cover;" alt="">
+                                </figure>
+                                <div class="p-3">
+                                    <h3><?php echo $team['name'] ?></h3>
+                                    <span class="position"><?php echo $team['position_name'] ?></span>
+                                </div>
+                            </div>
+                        </div>
 
-          <div class="col-xl-4 col-md-6 d-flex" data-aos="zoom-in" data-aos-delay="400">
-            <div class="team-member">
-              <div class="member-img">
-                <img src="assets/img/team/team-2.jpg" class="img-fluid" alt="">
-              </div>
-              <div class="member-info">
-                <div class="social">
-                  <a href=""><i class="bi bi-twitter-x"></i></a>
-                  <a href=""><i class="bi bi-facebook"></i></a>
-                  <a href=""><i class="bi bi-instagram"></i></a>
-                  <a href=""><i class="bi bi-linkedin"></i></a>
-                </div>
-                <h4>Sarah Jhonson</h4>
-                <span>Product Manager</span>
-              </div>
-            </div>
-          </div><!-- End Team Member -->
+                    <?php endforeach ?>
 
-          <div class="col-xl-4 col-md-6 d-flex" data-aos="zoom-in" data-aos-delay="600">
-            <div class="team-member">
-              <div class="member-img">
-                <img src="assets/img/team/team-3.jpg" class="img-fluid" alt="">
-              </div>
-              <div class="member-info">
-                <div class="social">
-                  <a href=""><i class="bi bi-twitter-x"></i></a>
-                  <a href=""><i class="bi bi-facebook"></i></a>
-                  <a href=""><i class="bi bi-instagram"></i></a>
-                  <a href=""><i class="bi bi-linkedin"></i></a>
+
+
+
+
                 </div>
-                <h4>William Anderson</h4>
-                <span>CTO</span>
-              </div>
-            </div>
-          </div><!-- End Team Member -->
 
         </div>
 

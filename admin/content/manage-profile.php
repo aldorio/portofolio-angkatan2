@@ -4,6 +4,8 @@ include "config/koneksi.php";
 
 if(isset($_POST['simpan'])){
   $profile_name = $_POST['profile_name'];
+  $pendidikan = $_POST['pendidikan'];
+  $pengalaman = $_POST['pengalaman'];
   $description = $_POST['description'];
   // proses simpan foto
   $photo = $_FILES['photo']['name'];
@@ -27,12 +29,12 @@ if(isset($_POST['simpan'])){
       unlink("uploads/" . $rowProfile['photo']);
       move_uploaded_file($tmp_name, $filePath);
 
-      $update = mysqli_query($config, "UPDATE profiles SET profile_name='$profile_name', description='$description', photo='$filesName' WHERE id ='$id' ");
+      $update = mysqli_query($config, "UPDATE profiles SET profile_name='$profile_name', pendidikan='$pendidikan', pengalaman='$pengalaman', description='$description', photo='$filesName' WHERE id ='$id' ");
     header("location:?page=manage-profile&tambah=berhasil");
     } else {
 
     // perintah up  
-    $update = mysqli_query($config, "UPDATE profiles SET profile_name='$profile_name', description='$description', photo='$filesName' WHERE id ='$id' ");
+    $update = mysqli_query($config, "UPDATE profiles SET profile_name='$profile_name', pendidikan='$pendidikan', pengalaman='$pengalaman', description='$description', photo='$filesName' WHERE id ='$id' ");
     header("location:?page=manage-profile&tambah=berhasil");
     }
   }else{
@@ -42,14 +44,14 @@ if(isset($_POST['simpan'])){
       move_uploaded_file($tmp_name, $filePath);
       // jika user upload gambar
 
-      $insertQ = mysqli_query($config, "INSERT INTO profiles (profile_name, description, photo) 
+      $insertQ = mysqli_query($config, "INSERT INTO profiles (profile_name, pendidikan, pengalaman, description, photo) 
       VALUES ('$profile_name', '$description', '$filesName')");
       header("location:?page=manage-profile&tambah=berhasil");
       
 
     }else {
       // jika user tidak upload gambar
-      $insertQ = mysqli_query($config, "INSERT INTO profiles (profile_name, description) VALUES ('$profile_name', '$description')");
+      $insertQ = mysqli_query($config, "INSERT INTO profiles (profile_name, pendidikan, pengalaman,  description) VALUES ('$profile_name', '$pendidikan', '$pengalaman', '$description')");
       header("location:?page=manage-profile&tambah=berhasil");
       
       
@@ -93,8 +95,18 @@ $row = mysqli_fetch_assoc($selectProfile);
 <form action="" method="post" enctype="multipart/form-data">
   <div class="m-2" style="width:55%">  
     <div class="mb-3">
-    <label for="" class="form-label">Judul</label>
+    <label for="" class="form-label">Name</label>
     <input type="text"  value="<?php echo !isset($row['profile_name']) ? '' : $row['profile_name']?>" class="form-control" name="profile_name">
+    </div>
+
+    <div class="mb-3">
+    <label for="" class="form-label">Pendidikan</label>
+    <input type="text"  value="<?php echo !isset($row['pendidikan']) ? '' : $row['pendidikan']?>" class="form-control" name="pendidikan">
+    </div>
+
+    <div class="mb-3">
+    <label for="" class="form-label">Pengalaman</label>
+    <input type="text"  value="<?php echo !isset($row['pengalaman']) ? '' : $row['pengalaman']?>" class="form-control" name="pengalaman">
     </div>
 
     <div class="mb-3">
